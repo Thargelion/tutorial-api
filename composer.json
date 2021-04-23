@@ -1,0 +1,19 @@
+{
+  "name": "maximiliano/roberto-rpg",
+  "description": "Una API para aprender PHP",
+  "minimum-stability": "stable",
+  "license": "tuvieja",
+  "authors": [
+    {
+      "name": "Maximiliano",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Roberto\\": "src/"
+    }
+  }
+}
