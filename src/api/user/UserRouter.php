@@ -5,7 +5,7 @@ namespace Roberto\api\user;
 
 class UserRouter
 {
-    private static $instance;
+    private static UserRouter $instance;
 
     private function __construct()
     {
@@ -20,7 +20,6 @@ class UserRouter
         return self::$instance;
     }
 
-
     public function register()
     {
         $base = $_SERVER['REQUEST_URI'];
@@ -32,3 +31,4 @@ class UserRouter
     }
 
 }
+
