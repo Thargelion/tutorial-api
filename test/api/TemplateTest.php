@@ -8,23 +8,56 @@ use Roberto\api\Template;
 class TemplateTest extends TestCase
 {
 
-    public function testGetReportJsonFromCustomReport()
+    /**
+     * Si no el reporte no tiene 'Data'
+     * HasMore va a ser Falso
+     */
+    public function testGetReportJsonSetsHasMoreToFalseWhenNoDataGiven()
     {
         # Acá mockeamos el reporte que deserializamos desde el jsonWrapper
-        $returnValue = [
+        $reporteDeserializadoMockeado = [
             'resto' => 1,
             'alfajor de maizena' => 'hola',
             'merengue' => 2
         ];
+        $expected = false;
         # Construimos nuestro jsonWrapper mockeado
-        $jsonWrapper = new RichJsonMock($returnValue);
+        $jsonWrapper = new RichJsonMock($reporteDeserializadoMockeado);
+        # Le pasamos el json wrapper mockeado a nuestro Template
+        $template = new Template($jsonWrapper);
+        # Mockeamos nuestro reporte serializado
+        $reporteSerializado = new M_portal_customreport_ExportedReport();
+        # Y ahora, llamamos al getReport de nuestro template pasandolé un $report mockeado
+        $actual = $template->getReportJsonFromCustomReport($reporteSerializado);
+
+        # Cuando el data viene nulo, no tiene que haber ruptura y hasMore tiene que volver falso.
+        $this->assertEquals($expected, $actual['hasMore']);
+    }
+
+    /**
+     * Given Data Array Size Bigger Than recordsPerPage
+     * When getReportJsonFromCustomReport called with Given
+     * Then Actual['hasMore'] is True
+     */
+    public function testGetReportJson_SetsHasMoreToTrue_WhenDataIsBigger_ThanRecordsPerPage()
+    {
+        # Acá mockeamos el reporte que deserializamos desde el jsonWrapper
+        $reporteMockeado = [
+            'data' => ['1', '2', '3', '4'],
+            'resto' => 1,
+            'alfajor de maizena' => 'hola',
+            'merengue' => 2
+        ];
+        $expected = true;
+        $givenRecordsPerPage = 2;
+        # Construimos nuestro jsonWrapper mockeado
+        $jsonWrapper = new RichJsonMock($reporteMockeado);
         # Le pasamos el json wrapper mockeado a nuestro Template
         $template = new Template($jsonWrapper);
         # Mockeamos nuestro reporte
         $report = new M_portal_customreport_ExportedReport();
         # Y ahora, llamamos al getReport de nuestro template pasandolé un $report mockeado
-        $expected = false;
-        $actual = $template->getReportJsonFromCustomReport($report);
+        $actual = $template->getReportJsonFromCustomReport($report, $givenRecordsPerPage);
 
         # Cuando el data viene nulo, no tiene que haber ruptura y hasMore tiene que volver falso.
         $this->assertEquals($expected, $actual['hasMore']);
