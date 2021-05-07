@@ -60,7 +60,7 @@ class Template
         $dataSize = 0;
         $jsonReport = $this->richJsonWrapper->unserialize($report->getContents());
 
-        if (isset($jsonReport['data']) && $jsonReport !== null) {
+        if (isset($jsonReport['data']) && $jsonReport['data'] !== null) {
             $dataSize = sizeof($jsonReport['data']);
         }
         $jsonReport['hasMore'] = $recordsPerPage && $dataSize > $recordsPerPage;
@@ -80,7 +80,6 @@ class Template
     )
     {
         $jsonReport = $this->richJsonWrapper->unserialize($report->getContents());
-        $jsonReport['hasMore'] = $recordsPerPage && sizeof($jsonReport['data']) > $recordsPerPage;
         if ($jsonReport->hasMore($recordsPerPage)) {
             array_pop($jsonReport['data']);
         }
